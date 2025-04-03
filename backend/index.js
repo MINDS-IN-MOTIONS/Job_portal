@@ -1,15 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
+import dotenvenv from 'dotenv';
+import connectDB from './utils/db.js';
+dotenvenv.config({});
 const app = express();
-app.get("/home", (req,res)=>{
-    return res.status(200).json({
-        message: "I m coming form backend",
-        success: true
-    })
-})
 
 // Middleware
 app.use(express.json());
@@ -30,5 +25,6 @@ app.get('/', (req, res) => {
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
+    connectDB();
     console.log(`Server is running on port ${PORT}`);
 });
