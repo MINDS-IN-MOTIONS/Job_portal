@@ -35,7 +35,8 @@ export const register = async (req, res) => {
 
         return res.status(201).json({ 
             message: 'Registration successful', 
-            user 
+            user,
+            success: true, 
         });
     } catch (err) {
         return res.status(500).json({ 
@@ -89,7 +90,50 @@ export const login = async (req, res) => {
         };
         return res.status(200).cookie('token', token, {maxAge: 24 * 60 * 60 * 1000, httpOnly: true, samesite:'strict'}).json({
              message: `Welcome back ${user.fullname}`,
+             user,
              success: true,
+        });
+    } catch (err) {
+        return res.status(500).json({ 
+            error: 'Internal server error', 
+            details: err.message 
+        });
+    }
+};
+
+export const logout = async (req, res) => {
+    try {
+        return res.ststus(200).Cookie("token","",{maxAge:0}).json({
+            message: "Logout successful",
+            success: true,
+        });
+    } catch (err) {
+        return res.status(500).json({ 
+            error: 'Internal server error', 
+            details: err.message 
+        });
+    }
+}
+export const updateProfile = async (req, res) => {
+    try {
+        const { fullname, email, phoneNumber, bio, skills } = req.body;
+
+        // Ensure all required fields are provided
+        if (!fullname || !email || !phoneNumber || !bio || !skills) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        // Update the user profile
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id,
+            { fullname, email, phoneNumber, bio, skills },
+            { new: true }
+        );
+
+        return res.status(200).json({ 
+            message: 'Profile updated successfully', 
+            user: updatedUser,
+            success: true 
         });
     } catch (err) {
         return res.status(500).json({ 
