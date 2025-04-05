@@ -9,7 +9,7 @@ const isAuthenticated = (req, res, next) => {
         }
 
         // ✅ Minimal fix to support both header and cookie
-        // const actualToken = token.startsWith('Bearer ') ? token.split(' ')[1] : token;
+        const actualToken = token.startsWith('Bearer ') ? token.split(' ')[1] : token;
 
         const decoded = jwt.verify(actualToken, process.env.SECRET_KEY);
         if (!decoded) {

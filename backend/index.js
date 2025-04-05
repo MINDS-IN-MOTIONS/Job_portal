@@ -3,9 +3,13 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenvenv from 'dotenv';
 import connectDB from './utils/db.js';
+import userRoutes from './routes/user.route.js';
+import companyRoutes from './routes/company.route.js';
+
+
+
 dotenvenv.config({});
 const app = express();
-import userRoutes from './routes/user.route.js';
 
 // Middleware
 app.use(express.json());
@@ -22,7 +26,7 @@ const PORT = process.env.PORT || 3000;
 
 // API's
 app.use('/api/v1/user', userRoutes);
-http://localhost:8000/api/v1/user/register
+app.use('/api/v1/company', companyRoutes);
 
 
 app.listen(PORT, () => {
