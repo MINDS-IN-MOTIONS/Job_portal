@@ -117,22 +117,48 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
+        const file = req.file;
 
         // Ensure all required fields are provided
         if (!fullname || !email || !phoneNumber || !bio || !skills) {
-            return res.status(400).json({ error: 'All fields are required' });
+            return res.status(400).json({ error: 'All fields are required', success: false });
+        }
+        // here we will use cloudnary for links and files 
+
+
+        const skillsArray = skills.split(',');
+        const userId = req.id; //Comes form middleware authentication
+
+        let user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+            success: false
         }
 
-        // Update the user profile
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user.id,
-            { fullname, email, phoneNumber, bio, skills },
-            { new: true }
-        );
+        //update the user profile
+        user.fullname = fullname;
+        user.email = email;
+        user.phoneNumber = phoneNumber;
+        user.profile.bio = bio;
+        user.profile.skills = skillsArray;
+        // the resume will come here leter 
+
+
+        await user.save()
+
+        user = {
+            id: user._id,
+            fullname: user.fullname,
+            email: user.email,
+            role: user.role,
+            phoneNumber: user.phoneNumber,
+            profile: user.profile,
+        }
+
 
         return res.status(200).json({ 
             message: 'Profile updated successfully', 
-            user: updatedUser,
+            user,
             success: true 
         });
     } catch (err) {
