@@ -103,7 +103,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        return res.ststus(200).Cookie("token","",{maxAge:0}).json({
+        return res.status(200).cookie("token","",{maxAge:0}).json({
             message: "Logout successful",
             success: true,
         });
@@ -119,35 +119,45 @@ export const updateProfile = async (req, res) => {
         const { fullname, email, phoneNumber, bio, skills } = req.body;
         const file = req.file;
 
-        const userId = req.id; // Comes from middleware authentication
+        // here we will use cloudnary for links and files 
+
+
+        let skillsArray;
+        if (skills) {
+            // Split the skills string into an array
+            skillsArray = skills.split(',');
+        };
+        const userId = req.id; //Comes form middleware authentication
 
         let user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({ error: 'User not found', success: false });
+            return res.status(400).json({ error: 'User not found', success: false });
         }
 
-        // Update only the fields that are provided
+        // Update the user profile only if the fields are provided
         if (fullname) user.fullname = fullname;
         if (email) user.email = email;
         if (phoneNumber) user.phoneNumber = phoneNumber;
         if (bio) user.profile.bio = bio;
-        if (skills) user.profile.skills = skills.split(',');
+        if (skills) user.profile.skills = skillsArray;
+        // the resume will come here leter 
 
-        // Save the updated user
-        await user.save();
 
-        const updatedUser = {
-            id: user._id,
+        await user.save()
+
+        user = {
+            _id: user._id,
             fullname: user.fullname,
             email: user.email,
             role: user.role,
             phoneNumber: user.phoneNumber,
             profile: user.profile,
-        };
+        }
+
 
         return res.status(200).json({ 
             message: 'Profile updated successfully', 
-            user: updatedUser,
+            user,
             success: true 
         });
     } catch (err) {
