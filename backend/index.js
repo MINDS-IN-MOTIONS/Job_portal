@@ -5,6 +5,7 @@ import dotenvenv from 'dotenv';
 import connectDB from './utils/db.js';
 dotenvenv.config({});
 const app = express();
+import userRoutes from './routes/user.route.js';
 
 // Middleware
 app.use(express.json());
@@ -16,14 +17,14 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
-// Routes
-app.get('/', (req, res) => {
-    res.send('Welcome to the Job Portal API');
-});
-
 // Start the server
 const PORT = process.env.PORT || 3000;
+
+// API's
+app.use('/api/v1/user', userRoutes);
+http://localhost:8000/api/v1/user/register
+
+
 app.listen(PORT, () => {
     connectDB();
     console.log(`Server is running on port ${PORT}`);
