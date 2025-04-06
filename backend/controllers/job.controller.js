@@ -47,7 +47,7 @@ export const getAllJobs = async (req, res) => {
         };
         const jobs = await Job.find(query)
             .populate('company', 'name')
-            .populate('createdBy', 'name')
+            .populate('created_by', 'name')
             .sort({ createdAt: -1 });
 
         if (!jobs || jobs.length === 0) {
@@ -74,7 +74,7 @@ export const getJobById = async (req, res) => {
         const jobId = req.params.id;
         const job = await Job.findById(jobId)
             .populate('company', 'name')
-            .populate('createdBy', 'name');
+            .populate('created_by', 'name');
         if (!job) {
             return res.status(404).json({
                 message: 'Job not found',
@@ -101,9 +101,9 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
     try {
         const adminId = req.id;
-        const jobs = await Job.find({ createdBy: adminId })
+        const jobs = await Job.find({ created_by: adminId })
             .populate('company', 'name')
-            .populate('createdBy', 'name')
+            .populate('created_by', 'name')
             .sort({ createdAt: -1 });
         if (!jobs || jobs.length === 0) {
             return res.status(404).json({
