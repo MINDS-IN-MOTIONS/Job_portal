@@ -17,9 +17,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production' 
-        ? [process.env.FRONTEND_URL || 'https://your-frontend-domain.com']
-        : ['http://localhost:5173', 'http://localhost:3000'],
+    origin: [
+        'https://job-portal-bpis439m3-deepakdekisugis-projects.vercel.app',
+        'http://localhost:5173', 
+        'http://localhost:3000',
+        'http://localhost:8080'
+    ],
     credentials: true
 }
 
