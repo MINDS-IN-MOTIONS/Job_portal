@@ -1,26 +1,25 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-const isAuthenticated = (req, res, next) => {
+const isAuthenticated = async (req, res, next) => {
     try {
-        const token = req.cookies.token || req.headers['authorization'];
-    
+        const token = req.cookies.token;
         if (!token) {
-            return res.status(401).json({ message: 'Access denied. Login first.', success: false });
+            return res.status(401).json({
+                message: "User not authenticated",
+                success: false,
+            })
         }
-
-        // ✅ Minimal fix to support both header and cookie
-        const actualToken = token.startsWith('Bearer ') ? token.split(' ')[1] : token;
-
-        const decoded = jwt.verify(actualToken, process.env.SECRET_KEY);
-        if (!decoded) {
-            return res.status(401).json({ message: 'Invalid token.', success: false });
-        }
-
-        req.id = decoded.userId || decoded.id; // In case your token uses 'id' instead of 'userId'
+        const decode = await jwt.verify(token, process.env.SECRET_KEY);
+        if(!decode){
+            return res.status(401).json({
+                message:"Invalid token",
+                success:false
+            })
+        };
+        req.id = decode.userId;
         next();
-    } catch (err) {
-        return res.status(400).json({ message: 'Invalid token.' });
+    } catch (error) {
+        console.log(error);
     }
-};
-
+}
 export default isAuthenticated;
