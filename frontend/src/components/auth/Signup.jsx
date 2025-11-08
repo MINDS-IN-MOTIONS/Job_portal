@@ -53,10 +53,10 @@ const Signup = () => {
             if (res.data.success) {
                 navigate("/login");
                 toast.success(res.data.message);
-            }
-        } catch (error) {
+            }        } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            toast.error(errorMessage);
         } finally{
             dispatch(setLoading(false));
         }

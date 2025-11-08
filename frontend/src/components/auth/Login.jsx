@@ -40,10 +40,10 @@ const Login = () => {
                 dispatch(setUser(res.data.user));
                 navigate("/");
                 toast.success(res.data.message);
-            }
-        } catch (error) {
+            }        } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            toast.error(errorMessage);
         } finally {
             dispatch(setLoading(false));
         }

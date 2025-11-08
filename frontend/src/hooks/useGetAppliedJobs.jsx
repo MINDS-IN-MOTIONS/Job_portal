@@ -14,9 +14,9 @@ const useGetAppliedJobs = () => {
                 console.log(res.data);
                 if(res.data.success){
                     dispatch(setAllAppliedJobs(res.data.application));
-                }
-            } catch (error) {
-                console.log(error);
+                }            } catch (error) {
+                console.log('Error fetching applied jobs:', error);
+                // Don't crash the app, just log the error
             }
         }
         fetchAppliedJobs();

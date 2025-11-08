@@ -51,9 +51,9 @@ const PostJob = () => {
             if(res.data.success){
                 toast.success(res.data.message);
                 navigate("/admin/jobs");
-            }
-        } catch (error) {
-            toast.error(error.response.data.message);
+            }        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            toast.error(errorMessage);
         } finally{
             setLoading(false);
         }

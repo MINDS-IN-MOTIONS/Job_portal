@@ -20,9 +20,9 @@ const ApplicantsTable = () => {
             console.log(res);
             if (res.data.success) {
                 toast.success(res.data.message);
-            }
-        } catch (error) {
-            toast.error(error.response.data.message);
+            }        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+            toast.error(errorMessage);
         }
     }
 

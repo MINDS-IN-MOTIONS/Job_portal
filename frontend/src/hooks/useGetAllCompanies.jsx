@@ -13,9 +13,9 @@ const useGetAllCompanies = () => {
                 console.log('called');
                 if(res.data.success){
                     dispatch(setCompanies(res.data.companies));
-                }
-            } catch (error) {
-                console.log(error);
+                }            } catch (error) {
+                console.log('Error fetching companies:', error);
+                // Don't crash the app, just log the error
             }
         }
         fetchCompanies();
